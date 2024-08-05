@@ -1,25 +1,32 @@
 import os
 import datetime
+import csv
+from openpyxl import Workbook
 
 # Имя паука
 spider_name = "svetnewpars"
 
 # Генерация уникального имени файла на основе текущей даты и времени
 current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-output_filename = f"output_{current_time}.csv"
+csv_filename = f"output_{current_time}.csv"
+xlsx_filename = f"output_{current_time}.xlsx"
 
 # Формирование команды для запуска Scrapy
-command = f"scrapy crawl {spider_name} -o {output_filename}:csv -s FEED_EXPORT_ENCODING=utf-8"
+command = f"scrapy crawl {spider_name} -o {csv_filename}:csv -s FEED_EXPORT_ENCODING=utf-8"
 
 # Выполнение команды
 os.system(command)
 
-# Проверка и пере-энкодирование если необходимо
-with open(output_filename, 'r', encoding='utf-8') as f:
-    content = f.read()
+print(f"Data has been saved to {csv_filename}")
 
-# Пере-энкодирование в utf-8 (если это необходимо, обычно уже utf-8)
-with open(output_filename, 'w', encoding='utf-8') as f:
-    f.write(content)
+# Чтение данных из CSV и запись в XLSX
+workbook = Workbook()
+sheet = workbook.active
 
-print(f"Data has been saved to {output_filename}")
+with open(csv_filename, 'r', encoding='utf-8') as f:
+    reader = csv.reader(f)
+    for row in reader:
+        sheet.append(row)
+
+workbook.save(xlsx_filename)
+print(f"Data has also been saved to {xlsx_filename}")
