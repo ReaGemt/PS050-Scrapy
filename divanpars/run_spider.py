@@ -12,21 +12,26 @@ csv_filename = f"output_{current_time}.csv"
 xlsx_filename = f"output_{current_time}.xlsx"
 
 # Формирование команды для запуска Scrapy
+# Указываем формат экспорта (csv) и кодировку (UTF-8)
 command = f"scrapy crawl {spider_name} -o {csv_filename}:csv -s FEED_EXPORT_ENCODING=utf-8"
 
-# Выполнение команды
+# Выполнение команды Scrapy для запуска паука
 os.system(command)
 
-print(f"Data has been saved to {csv_filename}")
+print(f"Данные сохранены в {csv_filename}")
 
 # Чтение данных из CSV и запись в XLSX
+# Создание нового Excel-файла
 workbook = Workbook()
 sheet = workbook.active
 
+# Открытие CSV-файла для чтения
 with open(csv_filename, 'r', encoding='utf-8') as f:
     reader = csv.reader(f)
+    # Добавление каждой строки из CSV в Excel
     for row in reader:
         sheet.append(row)
 
+# Сохранение данных в XLSX-файл
 workbook.save(xlsx_filename)
-print(f"Data has also been saved to {xlsx_filename}")
+print(f"Данные перекодированы и сохранены в  {xlsx_filename}")

@@ -68,36 +68,27 @@ pip install -r requirements.txt
 [settings]
 default = divanpars.settings
 ```
-Запуск паука
+### Запуск паука
+Запуск Scrapy через командную строку
 
 Вы можете запустить паука svetnewpars следующей командой:
+```
+scrapy crawl svetnewpars -o output.csv -s FEED_EXPORT_ENCODING=utf-8
+```
 
-```
-scrapy crawl svetnewpars
-```
-Для экспорта данных в CSV-файл с уникальным именем:
+### Запуск Scrapy через run_spider.py
+
+Запустите скрипт run_spider.py, чтобы автоматически собрать данные и сохранить их в файлы CSV и XLSX:
 
 ```
 python run_spider.py
 ```
-Это создаст файл с именем output_<дата_время>.csv, содержащий собранные данные.
-Содержание паука
+Этот скрипт создаст файлы с именами `output_<дата_время>.csv` и `output_<дата_время>.xlsx`, содержащие собранные данные.
+
+
+### Описание паука
 
 Файл svetnewpars_spider.py содержит паука, который:
 
     Собирает информацию о светильниках, включая название, цену и URL.
-
-Основные селекторы
-
-Убедитесь, что селекторы в svetnewpars_spider.py соответствуют структуре страницы:
-
-```
-svets = response.css('div._Ud0k')
-
-for svet in svets:
-    yield {
-        'name': svet.css('div.lsooF span::text').get(),
-        'price': svet.css('div.pY3d2 span::text').get(),
-        'url': response.urljoin(svet.css('a::attr(href)').get())
-    }
-```
+    Переходит на следующую страницу, если она существует, используя пагинацию.
