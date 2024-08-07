@@ -6,6 +6,7 @@
 
 - divanpars/                # Корневая папка проекта
     - scrapy.cfg            # Конфигурационный файл
+    - run_spider.py         # скрипт для запуска паука+создание csv и перекодировка его в xlsx
     - divanpars/            # Пакет проекта Scrapy
         - __init__.py
         - items.py
